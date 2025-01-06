@@ -41,16 +41,15 @@ public class CategoriaService {
     }
 
 
-    public void updateCategoria(Categoria categoriaReq, Tarea tarea, TareaDTO tareaReq) throws CategoriaNoExisteException {
-        categoriaReq.getTareas().remove(tarea);
-        repoCategorias.save(categoriaReq);
+    public void updateCategoria(Categoria categoriaReq, Tarea tarea) throws CategoriaNoExisteException {
+        categoriaReq.quitarTarea(tarea);
 
-        Optional<Categoria> categoriaNuevaOp = repoCategorias.findByNombre(tareaReq.getNombre());
+        Categoria categoriaOld = this.getCategoriaByTarea(tarea);
+        categoriaOld.quitarTarea(tarea);
 
-        if(categoriaNuevaOp.isEmpty()){
-            throw new CategoriaNoExisteException("No existe la nueva categoria");
-        }
+        categoriaReq.agregarTarea(tarea);
 
-        tarea.setCategoria(categoriaNuevaOp.get());
+        repoCategorias.saveAll(List.of(categoriaOld, categoriaReq));
+        tarea.setCategoria(categoriaReq);
     }
 }

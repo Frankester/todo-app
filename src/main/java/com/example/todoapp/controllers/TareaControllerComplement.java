@@ -8,8 +8,6 @@ import com.example.todoapp.models.dtos.TareaDTO;
 import com.example.todoapp.repositories.RepoCategorias;
 import com.example.todoapp.repositories.RepoTareas;
 import com.example.todoapp.services.CategoriaService;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -35,7 +32,7 @@ public class TareaControllerComplement {
     CategoriaService service;
 
     @PostMapping(path = {"/tareas", "/tareas/"})
-    public ResponseEntity<Object> saveTarea(@RequestBody TareaDTO tareaReq){
+    public ResponseEntity<Object> saveTarea(@RequestBody TareaDTO tareaReq) {
 
         CategoriaDTO categoria = tareaReq.getCategoria();
 
@@ -59,12 +56,10 @@ public class TareaControllerComplement {
 
         repoTareas.save(tarea);
 
-        categoriaGuardada.getTareas().add(tarea);
 
         repoCategorias.save(categoriaGuardada);
 
         return ResponseEntity.ok(tareaReq);
-
     }
 
     @PutMapping("/tareas/{idTareas}")
@@ -89,7 +84,7 @@ public class TareaControllerComplement {
             Categoria categoriaActual = service.getCategoriaByTarea(tarea);
 
             if(!Objects.equals(categoriaActual.getNombre(), categoriaReq.getNombre())){
-                service.updateCategoria(categoriaReq,tarea,tareaReq);
+                service.updateCategoria(categoriaReq,tarea);
             }
 
             tarea.setNombre(tareaReq.getNombre());
@@ -102,7 +97,6 @@ public class TareaControllerComplement {
             repoTareas.save(tarea);
 
             return ResponseEntity.ok(tareaReq);
-
         }
 
         return ResponseEntity.badRequest().body("La tarea debe tener estar asignada a una categoria");
