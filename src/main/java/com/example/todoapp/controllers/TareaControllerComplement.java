@@ -56,7 +56,7 @@ public class TareaControllerComplement {
 
         repoTareas.save(tarea);
 
-
+        categoriaGuardada.agregarTarea(tarea);
         repoCategorias.save(categoriaGuardada);
 
         return ResponseEntity.ok(tareaReq);
